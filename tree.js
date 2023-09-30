@@ -46,7 +46,17 @@ class Tree {
    * whose value is greater than lowerBound. */
 
   numGreater(lowerBound) {
-
+    let nodesVisited = [this.root];
+    let count = 0;
+    
+    while(nodesVisited.length) {
+      let current  = nodesVisited.pop()
+      if(current.val > lowerBound) {
+        count++
+      }
+      nodesVisited.push(...current.children)
+    }
+    return count
   }
 }
 
