@@ -17,6 +17,7 @@ class BinaryTree {
    * the length of the shortest path from the root to a leaf. */
 
   minDepth() {
+    if (!this.root) return 0;
     let nodesVisited = [this.root]
     let depth = 1; 
 
@@ -37,7 +38,6 @@ class BinaryTree {
           nodesVisited.push(current.right)
         }
       }
-
       depth++
     }
   }
@@ -46,6 +46,7 @@ class BinaryTree {
    * the length of the longest path from the root to a leaf. */
 
   maxDepth() {
+    if (!this.root) return 0;
     let nodesVisited = [this.root]
     let maxDepth = 0;
 
@@ -70,14 +71,58 @@ class BinaryTree {
    * The path doesn't need to start at the root, but you can't visit a node more than once. */
 
   maxSum() {
+    if(!this.root) return 0;
 
+    let maxSumValue = -Infinity
+
+    function dfs(node) {
+      if(!node) {
+        return 0
+      }
+
+      const leftMaxSum = dfs(node.left)
+
+      const rightMaxSum = dfs(node.right)
+
+
+      const currentMaxSum = Math.max(node.val, nopde.val + leftMaxSum, node.val + rightMaxSum)
+
+      maxSumValue = Math.max(maxSumValue, currentMaxSum)
+
+      return Math.max(node.val, node.val + leftMaxSum, node.val + rightMaxSum)
+    }
+
+    dfs(this.root)
+
+    return maxSumValue
   }
 
   /** nextLarger(lowerBound): return the smallest value in the tree
    * which is larger than lowerBound. Return null if no such value exists. */
 
   nextLarger(lowerBound) {
+    if(!this.root) {
+      return null;
+    }
 
+    let closestLarger = null
+
+    function inOrderTraversal(node) {
+      if(!node) {
+        return;
+      }
+
+      if(node.val >= lowerBound || node.val === closestLarger) {
+        inOrderTraversal(node.right)
+      }else{
+        inOrderTraversal(node.left)
+        inOrderTraversal(node.right)
+      }
+    }
+
+    inOrderTraversal(this.root)
+
+    return closestLarger;
   }
 
   /** Further study!
@@ -110,5 +155,24 @@ class BinaryTree {
     
   }
 }
+
+const root = new BinaryTreeNode(1)
+const node1 = new BinaryTreeNode(2)
+const node2 = new BinaryTreeNode(3)
+const node3 = new BinaryTreeNode(4)
+const node4 = new BinaryTreeNode(5)
+const node5 = new BinaryTreeNode(6)
+const node6 = new BinaryTreeNode(7)
+
+root.left = node1
+root.right = node2
+node2.left= node3
+node2.right = node4
+node4.left = node5
+node4.right = node6
+
+const tree = new BinaryTree(root)
+console.log(tree)
+console.log(tree.minDepth())
 
 module.exports = { BinaryTree, BinaryTreeNode };
